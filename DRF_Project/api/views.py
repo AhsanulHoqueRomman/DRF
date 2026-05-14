@@ -104,7 +104,7 @@ def studentsDetailView(request, pk):
 #         employee.delete()
 #         return Response(status=status.HTTP_204_NO_CONTENT)
 
-#Above are the class based views and to write less code we nedd mixins. ListModelMixin,CreateModelMixin,RetriveModelMixin,UpdateModelMixin,DestroyModelMixin.
+#Above are the class based views and to write less code we nedd mixins. ListModelMixin,CreateModelMixin,RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin.
 
 
 class Employees(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
@@ -118,5 +118,15 @@ class Employees(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Generic
         return self.create(request)
 
 
-class EmployeeDeatil(generics.GenericAPIView):
-    pass
+class EmployeeDeatil(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+
+    def get(self, request, pk):
+        return self.retrieve(request, pk)
+    
+    def put(self, request, pk):
+        return self.update(request, pk)
+    
+    def delete(self, request, pk):
+        return self.destroy(request, pk)
