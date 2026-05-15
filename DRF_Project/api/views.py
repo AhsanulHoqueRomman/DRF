@@ -8,6 +8,8 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from employees.models import Employee
 from django.http import Http404
+from blogs.models import Blog, Comment
+from blogs.serializers import BlogSerializer, CommentSerializer
 
 # Create your views here.
 
@@ -66,45 +68,50 @@ def studentsDetailView(request, pk):
 
 #Class-based views-
 
-# class Employees(APIView):
-#     def get(self, request):
-#         employee = Employee.objects.all()
-#         serializer = EmployeeSerializer(employee, many=True)
-#         return Response(serializer.data, status=status.HTTP_200_OK)
-    
-#     def post(self, request):
-#         serializer = EmployeeSerializer(data = request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-# class EmployeeDeatil(APIView):
-#     def get_object(self, pk):
-#         try:
-#             return Employee.objects.get(pk = pk)
-#         except Employee.DoesNotExist():
-#             raise Http404
+'''
 
-#     def get(self,request, pk):
-#         employee = self.get_object(pk)
-#         serializer = EmployeeSerializer(employee)
-#         return Response(serializer.data , status=status.HTTP_200_OK)
+class Employees(APIView):
+    def get(self, request):
+        employee = Employee.objects.all()
+        serializer = EmployeeSerializer(employee, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
-#     def put(self, request, pk):
-#         employee = self.get_object(pk)
-#         serializer = EmployeeSerializer(employee , data = request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_200_OK)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request):
+        serializer = EmployeeSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class EmployeeDeatil(APIView):
+    def get_object(self, pk):
+        try:
+            return Employee.objects.get(pk = pk)
+        except Employee.DoesNotExist():
+            raise Http404
 
-#     def delete(self, request, pk):
-#         employee = self.get_object(pk)
-#         employee.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
+    def get(self,request, pk):
+        employee = self.get_object(pk)
+        serializer = EmployeeSerializer(employee)
+        return Response(serializer.data , status=status.HTTP_200_OK)
+    
+    def put(self, request, pk):
+        employee = self.get_object(pk)
+        serializer = EmployeeSerializer(employee , data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#Above are the class based views and to write less code we nedd mixins. ListModelMixin,CreateModelMixin,RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin.
+    def delete(self, request, pk):
+        employee = self.get_object(pk)
+        employee.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+        
+'''
+
+#Above are the class based views and to write less code we need mixins. ListModelMixin,CreateModelMixin,RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin.
 
 '''
 
@@ -215,8 +222,25 @@ class Employees(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer   #[That's it. ModelViewSet Will automatically provide all pk and non-pk based operations.] 
 
-    
 
-    
 
-    
+#Below are Blog app views :
+
+class BlogsView(generics.ListCreateAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+
+
+class CommentsView(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer    
+
+class BlogDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+    lookup_field = 'pk'
+
+class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    lookup_field = 'pk'
