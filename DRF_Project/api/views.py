@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.http import JsonResponse
 from students.models import Student
 from .serializers import StudentSerializer,EmployeeSerializer
 from rest_framework.response import Response
-from rest_framework import  status, mixins, generics
+from rest_framework import  status, mixins, generics, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from employees.models import Employee
@@ -142,6 +142,8 @@ RetrieveUpdateAPIView - For retrieving single object and updating object using p
 RetrieveUpdateDestroyAPIView - For retrieving single object and updating object and deleting objects using pk
 
 '''
+#These generics views will automatially implement all the standard CRUD operations
+'''
 
 class Employees(generics.ListCreateAPIView):
     queryset = Employee.objects.all()
@@ -153,3 +155,66 @@ class EmployeeDeatil(generics.RetrieveUpdateDestroyAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer 
     lookup_field = "pk"
+
+'''
+
+'''
+By Using Mixins and Generics we reduce the lines of codes significantly.But we still have to write 2 class to to handle the standard CRUD operations.
+In Django Rest Framework We have another super powerful module named- ViewSet. It's a set of views which combines the functionalitites of
+views and serializers making it even more easier to perform standard CRUD operations.
+We have 2 types of implementation process of viewsets:
+1.We can extend 'viewsets.ViewSet' - we will have to provide these in-built functions such as: list(),create(),retrieve(),update(),delete(). 
+                                     One view class will handle all of these operations.
+2.Or we can extend 'viewsets.ModelViewSet'- It just takes only queryset and serializer_class and automatically provides booth 
+                                            pk-based and non pk-based operations.This ViewSet work with routers.Django Rest Framework provides 
+                                            us a router class that automatically determines the url pattern for us.We can not use traditional urls routes.
+
+'''
+
+#Process-1 : viewsets.ViewSet(So many lines of code required)
+
+'''
+
+class Employees(viewsets.ViewSet):
+    def list(self, request):
+        queryset = Employee.objects.all()
+        serializer = EmployeeSerializer(queryset, many =True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def create(self, request):
+        serializer = EmployeeSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status= status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def retrieve(self, request, pk=None):
+        employee = get_object_or_404(Employee, pk=pk)
+        serializer = EmployeeSerializer(employee)
+        return Response (serializer.data, status=status.HTTP_200_OK)
+    
+
+    def update(self, request, pk= None):
+        employee = get_object_or_404(Employee, pk=pk)
+        serializer = EmployeeSerializer(employee, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, pk=None):
+        employee = get_object_or_404(Employee, pk=pk)
+        employee.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+'''
+    
+
+
+
+
+    
+
+    
+
+    
