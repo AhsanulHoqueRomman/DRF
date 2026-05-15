@@ -106,6 +106,7 @@ def studentsDetailView(request, pk):
 
 #Above are the class based views and to write less code we nedd mixins. ListModelMixin,CreateModelMixin,RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin.
 
+'''
 
 class Employees(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Employee.objects.all()
@@ -130,3 +131,25 @@ class EmployeeDeatil(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.
     
     def delete(self, request, pk):
         return self.destroy(request, pk)
+
+'''
+
+#Generics give us some pre-built APIView classes and functions to do this same task with less lines of code.
+'''
+ListAPIView,CreateAPIView,RetrieveAPIView,UpdateAPIView,DestroyAPIView individually.
+ListCreateAPIView - For listing and creating objects
+RetrieveUpdateAPIView - For retrieving single object and updating object using pk
+RetrieveUpdateDestroyAPIView - For retrieving single object and updating object and deleting objects using pk
+
+'''
+
+class Employees(generics.ListCreateAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer 
+
+
+
+class EmployeeDeatil(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer 
+    lookup_field = "pk"
