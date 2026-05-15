@@ -165,7 +165,7 @@ views and serializers making it even more easier to perform standard CRUD operat
 We have 2 types of implementation process of viewsets:
 1.We can extend 'viewsets.ViewSet' - we will have to provide these in-built functions such as: list(),create(),retrieve(),update(),delete(). 
                                      One view class will handle all of these operations.
-2.Or we can extend 'viewsets.ModelViewSet'- It just takes only queryset and serializer_class and automatically provides booth 
+2.Or we can extend 'viewsets.ModelViewSet'- It just takes only queryset and serializer_class and automatically provides both 
                                             pk-based and non pk-based operations.This ViewSet work with routers.Django Rest Framework provides 
                                             us a router class that automatically determines the url pattern for us.We can not use traditional urls routes.
 
@@ -209,9 +209,11 @@ class Employees(viewsets.ViewSet):
 
 '''
     
+#Process -2 : viewsets.ModelViewSet:
 
-
-
+class Employees(viewsets.ModelViewSet):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer   #[That's it. ModelViewSet Will automatically provide all pk and non-pk based operations.] 
 
     
 
