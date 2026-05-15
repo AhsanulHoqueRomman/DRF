@@ -120,3 +120,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+
+#Mostly There are 2 types of paginatiopn used vastly.1- PageNumberPaginatiion and 2.LimitOffsetPagination.
+#2 types of Implementation process. 1- Globale Pagination(which will automatically work for all genereics and viewsets views)
+                                #   2- By implementing custom pagination classes.(For mixins and APIViews er have to use custom class for pagination.)
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE':2,
+}
