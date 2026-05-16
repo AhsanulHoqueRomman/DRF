@@ -11,7 +11,7 @@ from django.http import Http404
 from blogs.models import Blog, Comment
 from blogs.serializers import BlogSerializer, CommentSerializer
 from .paginations import CustomPagination
-from employees.filters import EmpployeeFilter
+from employees.filters import EmployeeFilter
 
 # Create your views here.
 
@@ -225,7 +225,7 @@ class Employees(viewsets.ModelViewSet):
     serializer_class = EmployeeSerializer   #[That's it. ModelViewSet Will automatically provide all pk and non-pk based operations.] 
     pagination_class = CustomPagination
     # filterset_fields = ['designation']      #Used when We implemented global filter.
-    filterset_class = EmpployeeFilter
+    filterset_class = EmployeeFilter
 
 
 
