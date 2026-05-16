@@ -10,6 +10,7 @@ from employees.models import Employee
 from django.http import Http404
 from blogs.models import Blog, Comment
 from blogs.serializers import BlogSerializer, CommentSerializer
+from .paginations import CustomPagination
 
 # Create your views here.
 
@@ -221,6 +222,7 @@ class Employees(viewsets.ViewSet):
 class Employees(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer   #[That's it. ModelViewSet Will automatically provide all pk and non-pk based operations.] 
+    pagination_class = CustomPagination
 
 
 
