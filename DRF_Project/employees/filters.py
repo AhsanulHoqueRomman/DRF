@@ -10,4 +10,4 @@ class EmpployeeFilter(django_filters.FilterSet):                    #FilterSet h
 
     class Meta:
         model = Employee
-        fields = ['designation', 'emp_name']
+        fields = ['designation', 'emp_name', 'id']
