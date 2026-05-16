@@ -223,6 +223,7 @@ class Employees(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer   #[That's it. ModelViewSet Will automatically provide all pk and non-pk based operations.] 
     pagination_class = CustomPagination
+    filterset_fields = ['designation']
 
 
 
