@@ -132,6 +132,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE':2,
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'SEARCH_PARAM' :  'q',          #Overriding the search param in urls 
+    'ORDERING_PARAM': 'order-by'
 }
 
 #Like pagination we can set default filtering globally and also set custom filtering too.
